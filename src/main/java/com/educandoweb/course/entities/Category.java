@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 //OBS:esse objeto tem relaçao muitos p/muitos com uma tabela Product que ainda nao foi criada
 
@@ -26,8 +28,8 @@ public class Category implements Serializable{
 	private Long id;
 	
 	private String name;
-	@Transient//esse comando impede o jpa de interpretar esse Set pois ele esta dando erro de chamada(chama um produto que
-	//tem lista de categorias e categoria que tem lista de produtos infinitamente)
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	

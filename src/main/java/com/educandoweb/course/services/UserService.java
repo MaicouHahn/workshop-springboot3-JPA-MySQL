@@ -13,6 +13,8 @@ import com.educandoweb.course.repositories.UserRepository;
 import com.educandoweb.course.services.exceptions.DataBaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 //@Component//registra a classe como componente do springboot
 @Service//é a mesma coisa que o component mas a palavra é semanticamente melhor
 public class UserService {
@@ -42,10 +44,17 @@ public class UserService {
 		}
 	}
 	public User update(Long id,User obj) {
-		User entity = repository.getReferenceById(id);
-		UpdateData(entity,obj);
 		
-		return repository.save(entity);
+		try {
+			
+			User entity = repository.getReferenceById(id);
+			UpdateData(entity,obj);
+			
+			return repository.save(entity);
+		}catch(EntityNotFoundException e) {
+			
+			throw new ResourceNotFoundException(id);
+		}
 	}
 	
 	private void UpdateData(User entity, User obj) {
